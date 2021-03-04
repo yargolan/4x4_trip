@@ -1,0 +1,81 @@
+{
+  "vehicles":
+  [
+    {
+      "make": "Jeep",
+      "models": [
+        {"index": "10", "name": "Grand Cherokee"},
+        {"index": "11", "name": "Wrangler Rubicon 3dr"},
+        {"index": "12", "name": "Wrangler Rubicon 5dr"}
+      ]
+    },
+    {
+      "make": "Land-rover",
+      "models": [
+        {"index": "20", "name": "Discovery"},
+        {"index": "21", "name": "Range Rover"}
+      ]
+    },
+    {
+      "make": "Mitsubishi",
+      "models": [
+        {"index": "30", "name": "Pajero (Short)"},
+        {"index": "31", "name": "Pajero (Long)"},
+        {"index": "32", "name": "Triton (Pickup)"}
+      ]
+    },
+    {
+      "make": "Nissan",
+      "models": [
+        {"index": "40", "name": "Pathfinder"},
+        {"index": "41", "name": "Winner"}
+      ]
+    },
+    {
+      "make": "Suzuki",
+      "models": [
+        {"index": "50", "name": "Jimny"}
+      ]
+    },
+    {
+      "make": "Toyota",
+      "models": [
+        {"index": "60", "name": "Prado 90"},
+        {"index": "61", "name": "Prado 95"},
+        {"index": "62", "name": "Land cruiser 120"},
+        {"index": "63", "name": "Land cruiser 125"},
+        {"index": "64", "name": "Land cruiser 150"},
+        {"index": "65", "name": "Land cruiser 155"},
+        {"index": "66", "name": "Hilux (Pickup)"}
+      ]
+    }
+  ],
+  "participants":
+  [
+    {
+      "name":"אהרוני דרור",
+      "email":"dror.aharoni@gmail.com",
+      "initials":"DA",
+      "vehicle_index":62
+    },
+    {
+      "name":"גולן ירון",
+      "email":"yargolan@gmail.com",
+      "initials":"YG",
+      "vehicle_index":60
+    },
+    {
+      "name":"ורסנו איציק",
+      "email":"Izack@varsanno.com",
+      "initials":"VI",
+      "vehicle_index":60
+    },
+    {
+      "name":"ורסנו שמוליק",
+      "email":"shmulik@varsanno.com",
+      "initials":"VS",
+      "vehicle_index":62
+    }
+  ]
+}
+

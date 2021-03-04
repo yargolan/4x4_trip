@@ -1,0 +1,4 @@
+{
+  "debug": "True",
+  "allowed_requests": ["user_add", "user_del", "user_modify", "vehicle_add", "vehicle_del", "vehicle_modify"]
+}
