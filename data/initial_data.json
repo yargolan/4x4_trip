@@ -55,25 +55,21 @@
     {
       "name":"אהרוני דרור",
       "email":"dror.aharoni@gmail.com",
-      "initials":"DA",
       "vehicle_index":62
     },
     {
       "name":"גולן ירון",
       "email":"yargolan@gmail.com",
-      "initials":"YG",
       "vehicle_index":60
     },
     {
       "name":"ורסנו איציק",
       "email":"Izack@varsanno.com",
-      "initials":"VI",
       "vehicle_index":60
     },
     {
       "name":"ורסנו שמוליק",
       "email":"shmulik@varsanno.com",
-      "initials":"VS",
       "vehicle_index":62
     }
   ]
