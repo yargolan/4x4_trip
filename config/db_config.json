@@ -1,0 +1,7 @@
+{
+  "client": "mongodb://localhost:27017/",
+  "databases": {
+    "name": "4x4_trips_database"
+  }
+}
+

@@ -1,0 +1,6 @@
+{
+  "debug": "True",
+  "sub_directories": {
+    "Pictures": "Pictures", "Routes": "Routes"
+  }
+}
