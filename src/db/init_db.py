@@ -9,7 +9,7 @@ db_name = "4wd_trips_database"
 
 def set_initial_data(client):
 
-    with open("../data/initial_data.json") as v:
+    with open("../config/initial_data.json") as v:
         initial_data = json.load(v)
 
     # Insert the list of vehicles

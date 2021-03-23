@@ -21,8 +21,6 @@ def main():
         debug_mode = True
 
     # Init the database.
-    if debug_mode:
-        print("Init the db...")
     init_database()
 
 
