@@ -11,30 +11,17 @@ debug_mode = False
 
 
 
-def main():
-
-    # init the application.
-    init_app()
-
-    global debug_mode
-    if app_config.get('debug').lower() == "true":
-        debug_mode = True
-
-    # Init the database.
-    init_database()
-
-
-
 def init_database():
 
     mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 
     db_name = db_config['databases']['name']
 
-    my_db = mongo_client[db_name]
-
     if debug_mode:
         print("Init the database")
+
+    # Drop the database if the flag enables it.
+    if db_config['drop_db_allowed'] == "True":
         mongo_client.drop_database(db_name)
 
 
@@ -42,10 +29,12 @@ def init_database():
     if db_name in db_list:
         if debug_mode:
             print("The database exists.")
+        return
     else:
         if debug_mode:
             print(f"Create the database '{db_name}'.")
-        init_db.set_initial_data(mongo_client)
+
+    init_db.set_initial_data(mongo_client, db_name)
 
 
 
@@ -58,43 +47,25 @@ def init_app():
         global db_config
         db_config = json.load(db)
 
+    global debug_mode
+    if app_config.get('debug').lower() == "true":
+        debug_mode = True
 
-
-if __name__ == '__main__':
-    main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-
-from db import init_db
-
-
-
-
-
+    if debug_mode:
+        print("\n*** Running in DEBUG mode. ***\n\n")
 
 
 
 def main():
 
     # init the application.
-    # 
-    # # init the database.
-    # init_database()
+    init_app()
+
+
+    # Init the database.
+    init_database()
 
 
 
-
-"""
+if __name__ == '__main__':
+    main()
