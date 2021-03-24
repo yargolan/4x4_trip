@@ -1,5 +1,6 @@
 {
   "client": "mongodb://localhost:27017/",
+  "drop_db_allowed": "False",
   "databases": {
     "name": "4x4_trips_database"
   }
