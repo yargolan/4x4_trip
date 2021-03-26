@@ -20,15 +20,15 @@ def set_initial_data(client):
 
     # Insert the list of vehicles
     all_vehicles = initial_data.get('vehicles')
-    set_vehicles(client, all_vehicles)
+    set_vehicles(client, db_name, all_vehicles)
 
     # Insert the list of participants
     all_participants = initial_data.get('participants')
-    set_participants(client, all_participants)
+    set_participants(client, db_name, all_participants)
 
 
 
-def set_participants(client, all_participants):
+def set_participants(client, db_name, all_participants):
 
     for p in all_participants:
 
@@ -39,7 +39,7 @@ def set_participants(client, all_participants):
         col_participants.insert_one(p)
 
 
-def set_vehicles(client, all_vehicles):
+def set_vehicles(client, db_name, all_vehicles):
 
     for make_and_model in all_vehicles:
 
