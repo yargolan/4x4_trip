@@ -4,10 +4,16 @@ import json
 
 
 # Insert the data into the DB.
-db_name = "4wd_trips_database"
+db_name = ""
 
 
 def set_initial_data(client):
+
+    # Get the DB name
+    with open("../config/db_config.json") as dbc:
+        db_config = json.load(dbc)
+        global db_name
+        db_name = db_config['database_name']
 
     with open("../config/initial_data.json") as v:
         initial_data = json.load(v)

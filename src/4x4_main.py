@@ -1,7 +1,11 @@
-
+import os
+import sys
 import json
+from pprint import pprint
+
 import pymongo
 from db import init_db
+from db import db_users
 
 
 # Global variables.
@@ -11,17 +15,31 @@ debug_mode = False
 
 
 
-def main():
+def main(arguments):
 
     # init the application.
     init_app()
+
 
     global debug_mode
     if app_config.get('debug').lower() == "true":
         debug_mode = True
 
+
     # Init the database.
     init_database()
+
+
+    # Perform user's actions
+    if len(arguments) == 2:
+        json_file = arguments[1]
+        if os.path.isfile(json_file):
+            perform_action(json_file)
+        else:
+            print(f"\nError:\nThe json file '{json_file}' is absent.")
+            sys.exit(0)
+    else:
+        sys.exit(0)
 
 
 
@@ -29,9 +47,7 @@ def init_database():
 
     mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 
-    db_name = db_config['databases']['name']
-
-    my_db = mongo_client[db_name]
+    db_name = db_config['database_name']
 
     if debug_mode:
         print("Init the database")
@@ -60,41 +76,38 @@ def init_app():
 
 
 
+
+
+
+
+
+
+
+
+def perform_action(action_file):
+
+    # Read the allowed actions file.
+    with open("../config/requests.json") as ar:
+        allowed_requests = json.load(ar)
+
+    # Read the user's requests file.
+    with open(action_file) as af:
+        user_action_file = json.load(af)
+
+    user_request = user_action_file['action']
+
+    if user_request in allowed_requests['allowed_requests']:
+        if user_request == "user_add":
+            pprint(user_action_file['data'])
+            db_users.user_add(user_action_file['data'])
+    else:
+        print(f"The request '{user_request}' is not allowed.")
+
+
+
+
+
+
+
 if __name__ == '__main__':
-    main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-
-from db import init_db
-
-
-
-
-
-
-
-
-def main():
-
-    # init the application.
-    # 
-    # # init the database.
-    # init_database()
-
-
-
-
-"""
+    main(sys.argv)
