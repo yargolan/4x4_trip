@@ -30,9 +30,9 @@ def run_query(query_index):
         sys.exit("Invalid query")
 
 
-    client  = AppData.client_name
+    client  = AppData.cfg_client_name
 
-    db_name = AppData.db_name
+    db_name = AppData.cfg_db_name
 
     mongo_client = pymongo.MongoClient(client)
 

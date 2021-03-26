@@ -1,17 +1,16 @@
 import os
 import sys
 import json
-from pprint import pprint
-
 import pymongo
+from pprint import pprint
 from db import init_db
 from db import db_users
+from AppData import AppData
 
 
 # Global variables.
 db_config  = {}
 app_config = {}
-debug_mode = False
 
 
 
@@ -19,11 +18,6 @@ def main(arguments):
 
     # init the application.
     init_app()
-
-
-    global debug_mode
-    if app_config.get('debug').lower() == "true":
-        debug_mode = True
 
 
     # Init the database.
@@ -49,8 +43,8 @@ def init_database():
 
     db_name = db_config['database_name']
 
-    if debug_mode:
-        print("Init the database")
+    if AppData.cfg_debug:
+        print("DEBUG: Init the database")
 
     # Drop the database if the flag enables it.
     if db_config['drop_db_allowed'] == "True":
@@ -59,14 +53,14 @@ def init_database():
 
     db_list = mongo_client.list_database_names()
     if db_name in db_list:
-        if debug_mode:
-            print("The database exists.")
+        if AppData.cfg_debug:
+            print("DEBUG: The database exists.")
         return
     else:
-        if debug_mode:
-            print(f"Create the database '{db_name}'.")
+        if AppData.cfg_debug:
+            print(f"DEBUG: Create the database '{db_name}'.")
 
-    init_db.set_initial_data(mongo_client, db_name)
+    init_db.set_initial_data(mongo_client)
 
 
 
@@ -79,31 +73,8 @@ def init_app():
         global db_config
         db_config = json.load(db)
 
-    global debug_mode
-    if app_config.get('debug').lower() == "true":
-        debug_mode = True
-
-    if debug_mode:
+    if AppData.cfg_debug:
         print("\n*** Running in DEBUG mode. ***\n\n")
-
-
-
-def main():
-
-    # init the application.
-    init_app()
-
-
-    # Init the database.
-    init_database()
-
-
-
-
-
-
-
-
 
 
 
@@ -121,10 +92,13 @@ def perform_action(action_file):
 
     if user_request in allowed_requests['allowed_requests']:
         if user_request == "user_add":
-            pprint(user_action_file['data'])
             db_users.user_add(user_action_file['data'])
+        elif user_request == "user_del":
+            db_users.user_del(user_action_file['data'])
+        else:
+            print(f"Cannot find what to do with the '{user_request}' action.")
     else:
-        print(f"The request '{user_request}' is not allowed.")
+        print(f"ERROR: The request '{user_request}' is not allowed.")
 
 
 
