@@ -2,21 +2,16 @@
 import json
 
 
-db_data  = {}
-app_data = {}
-
 
 class AppData(object):
 
-    with open("../config/db_config.json") as dbc:
-        db_data = json.load(dbc)
+    with open("../config/app_config.json") as ac:
+        config_data = json.load(ac)
 
-    with open("../config/config.json") as ac:
-        app_data = json.load(ac)
-
-
-    db_name     = db_data.get('database_name')
-    client_name = db_data.get('client')
+    # DB related configuration
+    cfg_db_name     = config_data['db']['database_name']
+    cfg_client_name = config_data['db']['client']
 
 
-    debug = (app_data.get('debug') == "True")
+    # Application related configuration
+    cfg_debug = (config_data['app']['debug'] == "True")

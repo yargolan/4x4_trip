@@ -66,7 +66,7 @@ def init_database():
         if debug_mode:
             print(f"Create the database '{db_name}'.")
 
-    init_db.set_initial_data(mongo_client, db_name)
+    init_db.set_initial_data(mongo_client)
 
 
 
@@ -85,25 +85,6 @@ def init_app():
 
     if debug_mode:
         print("\n*** Running in DEBUG mode. ***\n\n")
-
-
-
-def main():
-
-    # init the application.
-    init_app()
-
-
-    # Init the database.
-    init_database()
-
-
-
-
-
-
-
-
 
 
 
