@@ -1,7 +1,7 @@
 
 import sys
-import json
 import pymongo
+from AppData import AppData
 
 
 
@@ -22,59 +22,31 @@ def run_query(query_index):
 
     print()
 
-    # Read the DB properties
+    if query_index == "1":
+        relevant_column = "Participants"
+    elif query_index == "2":
+        relevant_column = "Vehicles"
+    else:
+        sys.exit("Invalid query")
+
+
+    client  = AppData.client_name
+
+    db_name = AppData.db_name
+
+    mongo_client = pymongo.MongoClient(client)
+
+    my_db = mongo_client[db_name]
+
+    data = my_db[relevant_column]
+
+    for result in data.find():
+        del result['_id']
+        print(result)
+
+
+
 
 
 if __name__ == '__main__':
     main(sys.argv)
-
-
-
-
-
-"""
-
-
-db_config = {}
-
-
-
-
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
-
-    with open('../config/db_config.json') as db:
-        db_config = json.load(db)
-
-    db_name = db_config['databases']['name']
-
-    my_db = mongo_client[db_name]
-
-    col_vehicles = my_db["Vehicles"]
-
-    for x in col_vehicles.find():
-        print(x)
-
-
-import json
-import pymongo
-
-
-db_config = {}
-
-
-if __name__ == '__main__':
-
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
-
-    with open('../config/db_config.json') as db:
-        db_config = json.load(db)
-
-    db_name = db_config['databases']['name']
-
-    my_db = mongo_client[db_name]
-
-    col_participants = my_db["Participants"]
-
-    for x in col_participants.find():
-        print(x)
-"""

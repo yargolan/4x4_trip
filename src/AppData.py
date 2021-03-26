@@ -15,8 +15,8 @@ class AppData(object):
         app_data = json.load(ac)
 
 
-    db_name     = db_data.get('client')
-    client_name = db_data.get('database_name')
+    db_name     = db_data.get('database_name')
+    client_name = db_data.get('client')
 
 
     debug = (app_data.get('debug') == "True")
