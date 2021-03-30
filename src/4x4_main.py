@@ -50,7 +50,9 @@ def scan_requests_dir():
                 # Verify if the scan should be stopped.
                 if item == AppData.stop_scanning_file:
                     os.unlink(item_full_path)
-                    Logger.info("Shutting down scan for requests.")
+                    Logger.info("Shutting down requests scanning process...")
+                    Logger.info("OK.")
+                    Logger.info("")
                     keep_scanning = False
                 else:
 
@@ -85,11 +87,11 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
     try:
         if action == Hardcoded.action_user_add:
-            ActionsUser.user_add(user_request_file_full_path)
+            ActionsUser.user_add(request['data'])
         elif action == Hardcoded.action_user_del:
-            ActionsUser.user_del(user_request_file_full_path)
+            ActionsUser.user_del(request['data'])
         elif action == Hardcoded.action_user_edit:
-            ActionsUser.user_edit(user_request_file_full_path)
+            ActionsUser.user_edit(request['data'])
         else:
             Logger.error(f"Error: Invalid action ({action}).")
             return
