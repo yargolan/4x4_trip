@@ -1,11 +1,7 @@
 {
-  "app": {
-    "debug": "True"
+  "requests": {
+    "new_requests_dir": "requests",
+    "handled_requests_dir": "requests/.handled"
   },
-  "db": {
-    "client": "mongodb://localhost:27017/",
-    "database_name": "4x4_trips_database",
-    "drop_db_allowed": "False"
-  }
+  "stop_scanning_file": "stop.it"
 }
-

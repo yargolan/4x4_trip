@@ -2,16 +2,12 @@
 import json
 
 
-
 class AppData(object):
 
+    # Read the application config file.
     with open("../config/app_config.json") as ac:
         config_data = json.load(ac)
 
-    # DB related configuration
-    cfg_db_name     = config_data['db']['database_name']
-    cfg_client_name = config_data['db']['client']
-
-
-    # Application related configuration
-    cfg_debug = (config_data['app']['debug'] == "True")
+    new_requests_dir     = config_data['requests']['new_requests_dir']
+    handled_requests_dir = config_data['requests']['handled_requests_dir']
+    stop_scanning_file   = config_data['stop_scanning_file']

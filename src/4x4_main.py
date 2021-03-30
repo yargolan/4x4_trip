@@ -1,110 +1,118 @@
+#!/usr/bin/python
+
 import os
-import sys
+import re
+import time
 import json
-import pymongo
-from pprint import pprint
-from db import init_db
-from db import db_users
+from src import Random, ActionsUser, Logger
 from AppData import AppData
-
-
-# Global variables.
-db_config  = {}
-app_config = {}
+from Hardcoded import Hardcoded
 
 
 
-def main(arguments):
+def verify_folders():
 
-    # init the application.
-    init_app()
+    os.chdir("..")
 
+    if not os.path.isdir(AppData.new_requests_dir):
+        Logger.info("Create the 'requests' folder")
+        os.mkdir(AppData.new_requests_dir)
 
-    # Init the database.
-    init_database()
-
-
-    # Perform user's actions
-    if len(arguments) == 2:
-        json_file = arguments[1]
-        if os.path.isfile(json_file):
-            perform_action(json_file)
-        else:
-            print(f"\nError:\nThe json file '{json_file}' is absent.")
-            sys.exit(0)
-    else:
-        sys.exit(0)
+    if not os.path.isdir(AppData.handled_requests_dir):
+        Logger.info("Create the 'requests/.handled' folder")
+        os.mkdir(AppData.handled_requests_dir)
 
 
 
-def init_database():
+def scan_requests_dir():
 
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    keep_scanning = True
 
-    db_name = db_config['database_name']
+    new_requests_dir = AppData.new_requests_dir
 
-    if AppData.cfg_debug:
-        print("DEBUG: Init the database")
+    while keep_scanning:
 
-    # Drop the database if the flag enables it.
-    if db_config['drop_db_allowed'] == "True":
-        mongo_client.drop_database(db_name)
+        # sleep for 5 seconds between iterations.
+        time.sleep(5)
 
 
-    db_list = mongo_client.list_database_names()
-    if db_name in db_list:
-        if AppData.cfg_debug:
-            print("DEBUG: The database exists.")
+        # Get the folder's content
+        content = os.listdir(new_requests_dir)
+
+        for item in content:
+
+            item_full_path = f"{new_requests_dir}/{item}"
+
+            # Handle only files.
+            if os.path.isfile(item_full_path):
+
+                # Verify if the scan should be stopped.
+                if item == AppData.stop_scanning_file:
+                    os.unlink(item_full_path)
+                    Logger.info("Shutting down scan for requests.")
+                    keep_scanning = False
+                else:
+
+                    # Verify if we need to process a request.
+                    regex = re.search("^user_request_.*.json$", item)
+                    if regex is not None:
+                        process_user_requests(item, item_full_path)
+                    else:
+                        Logger.info(f"Invalid file ({item}), deleting...")
+                        os.unlink(item_full_path)
+
+
+
+def process_user_requests(user_request_file, user_request_file_full_path):
+
+    Logger.info(f"Handling user request '{user_request_file}' ...")
+
+    # Read the request.
+    with open(user_request_file_full_path) as r:
+        request = json.load(r)
+
+
+    # Validate the request.
+    try:
+        action = request['action']
+    except KeyError:
+        Logger.error(" - The request file is invalid.")
+        Logger.error(" - Missing 'action' key")
+        os.unlink(user_request_file_full_path)
         return
-    else:
-        if AppData.cfg_debug:
-            print(f"DEBUG: Create the database '{db_name}'.")
-
-    init_db.set_initial_data(mongo_client)
 
 
-
-def init_app():
-    with open('../config/config.json') as c:
-        global app_config
-        app_config = json.load(c)
-
-    with open('../config/db_config.json') as db:
-        global db_config
-        db_config = json.load(db)
-
-    if AppData.cfg_debug:
-        print("\n*** Running in DEBUG mode. ***\n\n")
-
-
-
-def perform_action(action_file):
-
-    # Read the allowed actions file.
-    with open("../config/requests.json") as ar:
-        allowed_requests = json.load(ar)
-
-    # Read the user's requests file.
-    with open(action_file) as af:
-        user_action_file = json.load(af)
-
-    user_request = user_action_file['action']
-
-    if user_request in allowed_requests['allowed_requests']:
-        if user_request == "user_add":
-            db_users.user_add(user_action_file['data'])
-        elif user_request == "user_del":
-            db_users.user_del(user_action_file['data'])
+    try:
+        if action == Hardcoded.action_user_add:
+            ActionsUser.user_add(user_request_file_full_path)
+        elif action == Hardcoded.action_user_del:
+            ActionsUser.user_del(user_request_file_full_path)
+        elif action == Hardcoded.action_user_edit:
+            ActionsUser.user_edit(user_request_file_full_path)
         else:
-            print(f"Cannot find what to do with the '{user_request}' action.")
-    else:
-        print(f"ERROR: The request '{user_request}' is not allowed.")
+            Logger.error(f"Error: Invalid action ({action}).")
+            return
+
+    except KeyError as ke:
+        Logger.error(f"Error running the '{action}' action: " + str(ke))
+
+
+    # Move the request into the 'handled' folder.
+    random_string = Random.generate_random_string(20)
+
+    os.rename(user_request_file_full_path, f"{AppData.handled_requests_dir}/{random_string}")
 
 
 
+def main():
 
+    # Verify folders.
+    verify_folders()
+
+    # Scan the new requests folder until we find a sign to break
+    scan_requests_dir()
 
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()
