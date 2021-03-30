@@ -7,6 +7,7 @@ import json
 from src import Random, ActionsUser, Logger
 from AppData import AppData
 from Hardcoded import Hardcoded
+from src.db import init_db
 
 
 
@@ -32,8 +33,8 @@ def scan_requests_dir():
 
     while keep_scanning:
 
-        # sleep for 5 seconds between iterations.
-        time.sleep(5)
+        # sleep for 'x' seconds between iterations.
+        time.sleep(AppData.sleep_interval)
 
 
         # Get the folder's content
@@ -49,7 +50,9 @@ def scan_requests_dir():
                 # Verify if the scan should be stopped.
                 if item == AppData.stop_scanning_file:
                     os.unlink(item_full_path)
-                    Logger.info("Shutting down scan for requests.")
+                    Logger.info("Shutting down requests scanning process...")
+                    Logger.info("OK.")
+                    Logger.info("")
                     keep_scanning = False
                 else:
 
@@ -65,7 +68,7 @@ def scan_requests_dir():
 
 def process_user_requests(user_request_file, user_request_file_full_path):
 
-    Logger.info(f"Handling user request '{user_request_file}' ...")
+    Logger.info(f"Handling user request '{user_request_file}'")
 
     # Read the request.
     with open(user_request_file_full_path) as r:
@@ -84,11 +87,11 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
     try:
         if action == Hardcoded.action_user_add:
-            ActionsUser.user_add(user_request_file_full_path)
+            ActionsUser.user_add(request['data'])
         elif action == Hardcoded.action_user_del:
-            ActionsUser.user_del(user_request_file_full_path)
+            ActionsUser.user_del(request['data'])
         elif action == Hardcoded.action_user_edit:
-            ActionsUser.user_edit(user_request_file_full_path)
+            ActionsUser.user_edit(request['data'])
         else:
             Logger.error(f"Error: Invalid action ({action}).")
             return
@@ -102,12 +105,37 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
     os.rename(user_request_file_full_path, f"{AppData.handled_requests_dir}/{random_string}")
 
+    Logger.info("OK.")
+    Logger.info("")
+
+
+
+def verify_database():
+    if AppData.allow_drop is True:
+        Logger.debug("Dropping the current DB.")
+        init_db.drop_tables()
+        Logger.debug("ok.")
+
+        Logger.debug("Create the DB.")
+        init_db.set_initial_data()
+        Logger.debug("ok.")
+
+
+
+def init_app():
+
+    # Verify folders.
+    verify_folders()
+
+    # Verify database.
+    verify_database()
+
 
 
 def main():
 
-    # Verify folders.
-    verify_folders()
+    # Init the app
+    init_app()
 
     # Scan the new requests folder until we find a sign to break
     scan_requests_dir()

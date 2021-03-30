@@ -23,16 +23,16 @@ def run_query(query_index):
     print()
 
     if query_index == "1":
-        relevant_column = "Participants"
+        relevant_column = AppData.col_name_participants
     elif query_index == "2":
-        relevant_column = "Vehicles"
+        relevant_column = AppData.col_name_vehicles
     else:
         sys.exit("Invalid query")
 
 
-    client  = AppData.cfg_client_name
+    client  = AppData.client
 
-    db_name = AppData.cfg_db_name
+    db_name = AppData.db_name
 
     mongo_client = pymongo.MongoClient(client)
 

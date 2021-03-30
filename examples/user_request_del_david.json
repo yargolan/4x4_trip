@@ -1,0 +1,8 @@
+{
+  "action": "user_del",
+  "data": {
+    "name":"דוד",
+    "email":"david.buzaglo@gmail.com",
+    "vehicle_index":61
+  }
+}

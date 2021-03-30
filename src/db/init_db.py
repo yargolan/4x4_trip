@@ -1,45 +1,31 @@
 
+import os
 import json
+import pymongo
+from src.AppData import AppData
 
 
 
-# Insert the data into the DB.
-db_name = ""
+def set_initial_data():
+
+    # Set the root folder.
+    root_folder = os.path.realpath(f"{os.path.dirname(os.path.realpath(__file__))}/../..")
 
 
-def set_initial_data(client):
-
-    # Get the DB name
-    with open("../config/db_config.json") as dbc:
-        db_config = json.load(dbc)
-        global db_name
-        db_name = db_config['database_name']
-
-    with open("../config/initial_data.json") as v:
-        initial_data = json.load(v)
-
-    # Insert the list of vehicles
-    all_vehicles = initial_data.get('vehicles')
-    set_vehicles(client, db_name, all_vehicles)
-
-    # Insert the list of participants
-    all_participants = initial_data.get('participants')
-    set_participants(client, db_name, all_participants)
+    # Read the initial data file.
+    with open(f"{root_folder}/config/initial_data.json") as i:
+        initial_data = json.load(i)
 
 
-
-def set_participants(client, db_name, all_participants):
-
-    for p in all_participants:
-
-        my_db = client[db_name]
-
-        col_participants = my_db['Participants']
-
-        col_participants.insert_one(p)
+    # Set the Mongo client
+    client = pymongo.MongoClient(AppData.client)
+    my_db  = client[AppData.db_name]
+    col_vehicles     = my_db[AppData.col_name_vehicles]
+    col_participants = my_db[AppData.col_name_participants]
 
 
-def set_vehicles(client, db_name, all_vehicles):
+    # Read the list of vehicles
+    all_vehicles = initial_data.get(AppData.col_name_vehicles)
 
     for make_and_model in all_vehicles:
 
@@ -48,14 +34,30 @@ def set_vehicles(client, db_name, all_vehicles):
 
         # Get the models dict.
         models_dict = make_and_model.get('models')
+
         for model in models_dict:
             model_name  = model.get('name')
             model_index = model.get('index')
 
             data = {"index": model_index, "make": make, "name": model_name}
 
-            my_db = client[db_name]
-
-            col_vehicles = my_db['Vehicles']
-
             col_vehicles.insert_one(data)
+
+
+    # Insert the list of participants
+    all_participants = initial_data.get(AppData.col_name_participants)
+
+    for p in all_participants:
+
+        col_participants.insert_one(p)
+
+
+
+def drop_tables():
+
+    # Set the Mongo client
+    client = pymongo.MongoClient(AppData.client)
+    my_db  = client[AppData.db_name]
+    cols = my_db.list_collection_names()
+    for col in cols:
+        my_db.drop_collection(col)
