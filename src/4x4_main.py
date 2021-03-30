@@ -108,9 +108,12 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 def verify_database():
     if AppData.allow_drop:
         Logger.debug("Dropping the current DB.")
+        init_db.drop_tables()
         Logger.debug("ok.")
 
-    init_db.set_initial_data()
+        Logger.debug("Create the DB.")
+        init_db.set_initial_data()
+        Logger.debug("ok.")
 
 
 def init_app():

@@ -4,10 +4,15 @@ import pymongo
 from src.AppData import AppData
 
 
+
 def set_initial_data():
 
+    # Get the root folder.
+    root_folder = AppData.root_folder
+
+
     # Read the initial data file.
-    with open("../config/initial_data.json") as v:
+    with open(f"{root_folder}/config/initial_data.json") as v:
         initial_data = json.load(v)
 
 
@@ -39,10 +44,9 @@ def set_initial_data():
 
 
 
-
 def set_initial_data_old():
 
-    with open("../config/initial_data.json") as v:
+    with open(f"{root_folder}/config/initial_data.json") as v:
         initial_data = json.load(v)
 
 
@@ -81,3 +85,18 @@ def set_initial_data_old():
         col_participants = my_db['Participants']
 
         col_participants.insert_one(p)
+
+
+
+def drop_tables():
+
+    # Get the root folder.
+    root_folder = AppData.root_folder
+
+
+    # Set the Mongo client
+    client = pymongo.MongoClient(AppData.client)
+    my_db  = client[AppData.db_name]
+    cols = my_db.list_collection_names()
+    for col in cols:
+        my_db.drop_collection(col)

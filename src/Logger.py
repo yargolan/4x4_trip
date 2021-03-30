@@ -13,7 +13,7 @@ def error(message):
 
 
 def debug(message):
-    print_message('E', message)
+    print_message('D', message)
 
 
 
