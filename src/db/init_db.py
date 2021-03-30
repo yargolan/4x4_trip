@@ -20,7 +20,8 @@ def set_initial_data():
     # Set the Mongo client
     client = pymongo.MongoClient(AppData.client)
     my_db  = client[AppData.db_name]
-    col_vehicles = my_db[AppData.col_name_vehicles]
+    col_vehicles     = my_db[AppData.col_name_vehicles]
+    col_participants = my_db[AppData.col_name_participants]
 
 
     # Read the list of vehicles
@@ -45,8 +46,6 @@ def set_initial_data():
 
     # Insert the list of participants
     all_participants = initial_data.get(AppData.col_name_participants)
-
-    col_participants = my_db[AppData.col_name_participants]
 
     for p in all_participants:
 

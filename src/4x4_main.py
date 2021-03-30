@@ -33,8 +33,8 @@ def scan_requests_dir():
 
     while keep_scanning:
 
-        # sleep for 5 seconds between iterations.
-        time.sleep(5)
+        # sleep for 'x' seconds between iterations.
+        time.sleep(AppData.sleep_interval)
 
 
         # Get the folder's content
@@ -66,7 +66,7 @@ def scan_requests_dir():
 
 def process_user_requests(user_request_file, user_request_file_full_path):
 
-    Logger.info(f"Handling user request '{user_request_file}' ...")
+    Logger.info(f"Handling user request '{user_request_file}'")
 
     # Read the request.
     with open(user_request_file_full_path) as r:
@@ -103,10 +103,13 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
     os.rename(user_request_file_full_path, f"{AppData.handled_requests_dir}/{random_string}")
 
+    Logger.info("OK.")
+    Logger.info("")
+
 
 
 def verify_database():
-    if AppData.allow_drop:
+    if AppData.allow_drop is True:
         Logger.debug("Dropping the current DB.")
         init_db.drop_tables()
         Logger.debug("ok.")

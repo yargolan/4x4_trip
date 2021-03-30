@@ -6,7 +6,8 @@ import json
 class AppData(object):
 
     # Set the root folder.
-    root_folder = os.path.realpath(f"{os.path.dirname(os.path.realpath(__file__))}/..")
+    root_folder   = os.path.realpath(f"{os.path.dirname(os.path.realpath(__file__))}/..")
+    sleep_interval = 3
 
 
     # Read the application config file.
