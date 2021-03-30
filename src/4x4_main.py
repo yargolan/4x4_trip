@@ -10,7 +10,6 @@ from pprint import pprint
 
 
 
-
 def verify_folders():
 
     os.chdir("..")
@@ -22,7 +21,9 @@ def verify_folders():
         os.mkdir(AppData.handled_requests_dir)
 
 
+
 def scan_requests_dir():
+
     keep_scanning = True
 
     new_requests_dir = AppData.new_requests_dir
@@ -33,24 +34,30 @@ def scan_requests_dir():
         time.sleep(5)
 
 
+        # Get the folder's content
         content = os.listdir(new_requests_dir)
 
         for item in content:
 
             item_full_path = f"{new_requests_dir}/{item}"
 
+            # Handle only files.
             if os.path.isfile(item_full_path):
 
                 # Verify if the scan should be stopped.
                 if item == AppData.stop_scanning_file:
                     os.unlink(item_full_path)
+                    print("Shutting down scan for requests.")
                     keep_scanning = False
-                    continue
+                else:
 
-                # Verify if we need to process a request.
-                x = re.search("^user_request_.*.json$", item)
-                if x is not None:
-                    process_user_request(item, item_full_path)
+                    # Verify if we need to process a request.
+                    regex = re.search("^user_request_.*.json$", item)
+                    if regex is not None:
+                        process_user_request(item, item_full_path)
+                    else:
+                        print(f"Invalid file ({item}), deleting...")
+                        os.unlink(item_full_path)
 
 
 
@@ -58,11 +65,28 @@ def process_user_request(user_request_file, user_request_file_full_path):
 
     print(f"Handling user request '{user_request_file}' ...")
 
-    # Read the request
+    # Read the request.
     with open(user_request_file_full_path) as r:
         request = json.load(r)
 
-    pprint(request)
+
+    # Validate the request.
+    try:
+        action = request['action']
+    except KeyError as ke:
+        print(" - The request file is invalid.")
+        print(" - Missing 'action' key")
+        os.unlink(user_request_file_full_path)
+        return
+
+    try:
+        data = request['data']
+    except KeyError as ke:
+        print(" - The request file is invalid.")
+        print(" - Missing 'data' key")
+        os.unlink(user_request_file_full_path)
+        return
+
 
 
     # Move the request into the 'handled' folder.
