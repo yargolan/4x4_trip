@@ -1,19 +1,12 @@
 
-from pprint import pprint
+
+def user_add(request_file):
+    print(request_file)
 
 
-def user_add(data):
-    pprint(data)
+def user_del(request_file):
+    pass
 
 
-
-def user_del(data):
-    pprint(data)
-
-
-
-def user_edit(data):
-    pprint(data)
-
-
-
+def user_edit(request_file):
+    pass

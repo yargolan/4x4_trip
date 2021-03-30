@@ -4,7 +4,7 @@ import os
 import re
 import time
 import json
-from src import Random, ActionsUser
+from src import Random, ActionsUser, Logger
 from AppData import AppData
 from Hardcoded import Hardcoded
 
@@ -15,9 +15,11 @@ def verify_folders():
     os.chdir("..")
 
     if not os.path.isdir(AppData.new_requests_dir):
+        Logger.info("Create the 'requests' folder")
         os.mkdir(AppData.new_requests_dir)
 
     if not os.path.isdir(AppData.handled_requests_dir):
+        Logger.info("Create the 'requests/.handled' folder")
         os.mkdir(AppData.handled_requests_dir)
 
 
@@ -47,23 +49,23 @@ def scan_requests_dir():
                 # Verify if the scan should be stopped.
                 if item == AppData.stop_scanning_file:
                     os.unlink(item_full_path)
-                    print("Shutting down scan for requests.")
+                    Logger.info("Shutting down scan for requests.")
                     keep_scanning = False
                 else:
 
                     # Verify if we need to process a request.
                     regex = re.search("^user_request_.*.json$", item)
                     if regex is not None:
-                        process_user_request(item, item_full_path)
+                        process_user_requests(item, item_full_path)
                     else:
-                        print(f"Invalid file ({item}), deleting...")
+                        Logger.info(f"Invalid file ({item}), deleting...")
                         os.unlink(item_full_path)
 
 
 
-def process_user_request(user_request_file, user_request_file_full_path):
+def process_user_requests(user_request_file, user_request_file_full_path):
 
-    print(f"Handling user request '{user_request_file}' ...")
+    Logger.info(f"Handling user request '{user_request_file}' ...")
 
     # Read the request.
     with open(user_request_file_full_path) as r:
@@ -74,26 +76,25 @@ def process_user_request(user_request_file, user_request_file_full_path):
     try:
         action = request['action']
     except KeyError:
-        print(" - The request file is invalid.")
-        print(" - Missing 'action' key")
+        Logger.error(" - The request file is invalid.")
+        Logger.error(" - Missing 'action' key")
         os.unlink(user_request_file_full_path)
         return
+
 
     try:
-        data = request['data']
-    except KeyError:
-        print(" - The request file is invalid.")
-        print(" - Missing 'data' key")
-        os.unlink(user_request_file_full_path)
-        return
+        if action == Hardcoded.action_user_add:
+            ActionsUser.user_add(user_request_file_full_path)
+        elif action == Hardcoded.action_user_del:
+            ActionsUser.user_del(user_request_file_full_path)
+        elif action == Hardcoded.action_user_edit:
+            ActionsUser.user_edit(user_request_file_full_path)
+        else:
+            Logger.error(f"Error: Invalid action ({action}).")
+            return
 
-
-    if action == Hardcoded.action_user_add:
-        ActionsUser.user_add(data)
-    elif action == Hardcoded.action_user_del:
-        ActionsUser.user_del(data)
-    elif action == Hardcoded.action_user_edit:
-        ActionsUser.user_edit(data)
+    except KeyError as ke:
+        Logger.error(f"Error running the '{action}' action: " + str(ke))
 
 
     # Move the request into the 'handled' folder.
@@ -103,14 +104,14 @@ def process_user_request(user_request_file, user_request_file_full_path):
 
 
 
-
-
 def main():
+
     # Verify folders.
     verify_folders()
 
     # Scan the new requests folder until we find a sign to break
     scan_requests_dir()
+
 
 
 if __name__ == '__main__':
