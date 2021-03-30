@@ -7,6 +7,7 @@ import json
 from src import Random, ActionsUser, Logger
 from AppData import AppData
 from Hardcoded import Hardcoded
+from src.db import init_db
 
 
 
@@ -104,10 +105,28 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
 
 
-def main():
+def verify_database():
+    if AppData.allow_drop:
+        Logger.debug("Dropping the current DB.")
+        Logger.debug("ok.")
+
+    init_db.set_initial_data()
+
+
+def init_app():
 
     # Verify folders.
     verify_folders()
+
+    # Verify database.
+    verify_database()
+
+
+
+def main():
+
+    # Init the app
+    init_app()
 
     # Scan the new requests folder until we find a sign to break
     scan_requests_dir()
