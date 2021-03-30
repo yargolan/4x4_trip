@@ -6,7 +6,6 @@ import time
 import json
 from src import Random
 from AppData import AppData
-from pprint import pprint
 
 
 
@@ -73,7 +72,7 @@ def process_user_request(user_request_file, user_request_file_full_path):
     # Validate the request.
     try:
         action = request['action']
-    except KeyError as ke:
+    except KeyError:
         print(" - The request file is invalid.")
         print(" - Missing 'action' key")
         os.unlink(user_request_file_full_path)
@@ -81,12 +80,15 @@ def process_user_request(user_request_file, user_request_file_full_path):
 
     try:
         data = request['data']
-    except KeyError as ke:
+    except KeyError:
         print(" - The request file is invalid.")
         print(" - Missing 'data' key")
         os.unlink(user_request_file_full_path)
         return
 
+
+    if action == "x":
+        print(data)
 
 
     # Move the request into the 'handled' folder.
