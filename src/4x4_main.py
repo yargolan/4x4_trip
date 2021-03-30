@@ -116,6 +116,7 @@ def verify_database():
         Logger.debug("ok.")
 
 
+
 def init_app():
 
     # Verify folders.

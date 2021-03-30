@@ -23,9 +23,9 @@ def run_query(query_index):
     print()
 
     if query_index == "1":
-        relevant_column = "Participants"
+        relevant_column = AppData.col_name_participants
     elif query_index == "2":
-        relevant_column = "Vehicles"
+        relevant_column = AppData.col_name_vehicles
     else:
         sys.exit("Invalid query")
 

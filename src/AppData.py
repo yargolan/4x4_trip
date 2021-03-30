@@ -27,3 +27,6 @@ class AppData(object):
     client     = db_data['client']
     db_name    = db_data['database_name']
     allow_drop = db_data['drop_db_allowed']
+
+    col_name_vehicles     = db_data['col_vehicles']
+    col_name_participants = db_data['col_participants']
