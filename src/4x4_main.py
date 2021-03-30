@@ -4,8 +4,9 @@ import os
 import re
 import time
 import json
-from src import Random
+from src import Random, ActionsUser
 from AppData import AppData
+from Hardcoded import Hardcoded
 
 
 
@@ -87,14 +88,20 @@ def process_user_request(user_request_file, user_request_file_full_path):
         return
 
 
-    if action == "x":
-        print(data)
+    if action == Hardcoded.action_user_add:
+        ActionsUser.user_add(data)
+    elif action == Hardcoded.action_user_del:
+        ActionsUser.user_del(data)
+    elif action == Hardcoded.action_user_edit:
+        ActionsUser.user_edit(data)
 
 
     # Move the request into the 'handled' folder.
     random_string = Random.generate_random_string(20)
 
     os.rename(user_request_file_full_path, f"{AppData.handled_requests_dir}/{random_string}")
+
+
 
 
 
