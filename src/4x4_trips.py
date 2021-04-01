@@ -3,7 +3,7 @@ import os
 import re
 import time
 from AppData import AppData
-from src import Logger
+import Logger
 
 
 

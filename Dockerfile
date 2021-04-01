@@ -6,6 +6,9 @@ WORKDIR /opt/4x4_trips
 
 RUN mkdir -p db requests
 
-COPY src/* .
+COPY run_me.sh .
 
-ENTRYPOINT ["python3", "4x4_trips.py"]
+COPY src src
+
+ENTRYPOINT ["/bin/bash", "-C", "./run_me.sh"]
+# ENTRYPOINT ["/bin/bash"]
