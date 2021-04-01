@@ -1,0 +1,8 @@
+{
+  "client": "mongodb://localhost:27017/",
+  "col_vehicles": "vehicles",
+  "database_name": "4x4_trips_database",
+  "drop_db_allowed": "false",
+  "col_participants": "participants"
+}
+

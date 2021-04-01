@@ -19,5 +19,6 @@ docker build . -t ${docker_name}_image
 # Run it.
 docker run --name ${docker_name} \
    -v "$(pwd)/db:/opt/${docker_name}/db" \
+   -v "$(pwd)/config:/opt/${docker_name}/config" \
    -v "$(pwd)/requests:/opt/${docker_name}/requests" \
    -dit ${docker_name}_image
