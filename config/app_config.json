@@ -3,5 +3,6 @@
     "new_requests_dir": "requests",
     "handled_requests_dir": "requests/.handled"
   },
-  "stop_scanning_file": "stop.it"
+  "stop_scanning_file": "stop.it",
+  "initial_data_file": "initial_data.json"
 }

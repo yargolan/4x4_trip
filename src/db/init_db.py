@@ -27,13 +27,16 @@ def set_initial_data():
     # Read the list of vehicles
     all_vehicles = initial_data.get(AppData.col_name_vehicles)
 
-    for make_and_model in all_vehicles:
+    for item in all_vehicles:
 
         # Get the make name.
-        make = make_and_model.get('make')
+        make = item.get('make')
+
+        # Get the make index.
+        make = item.get('index')
 
         # Get the models dict.
-        models_dict = make_and_model.get('models')
+        models_dict = item.get('models')
 
         for model in models_dict:
             model_name  = model.get('name')

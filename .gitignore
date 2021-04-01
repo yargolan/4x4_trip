@@ -37,4 +37,4 @@ venv.bak/
 
 
 # Current project
-requests
+requests/**

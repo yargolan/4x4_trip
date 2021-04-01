@@ -4,7 +4,7 @@ import os
 import re
 import time
 import json
-from src import Random, ActionsUser, Logger
+from src import Random, Logger, ActionsUser, ActionsVehicle
 from AppData import AppData
 from Hardcoded import Hardcoded
 from src.db import init_db
@@ -58,8 +58,7 @@ def scan_requests_dir():
 
                     # Verify if we need to process a request.
                     regex = re.search("^user_request_.*.json$", item)
-                    if regex is not None:
-                        process_user_requests(item, item_full_path)
+                    if regex is not None:                        process_user_requests(item, item_full_path)
                     else:
                         Logger.info(f"Invalid file ({item}), deleting...")
                         os.unlink(item_full_path)
@@ -87,11 +86,13 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
     try:
         if action == Hardcoded.action_user_add:
-            ActionsUser.user_add(request['data'])
+            ActionsUser.add(request['data'])
         elif action == Hardcoded.action_user_del:
-            ActionsUser.user_del(request['data'])
+            ActionsUser.delete(request['data'])
         elif action == Hardcoded.action_user_edit:
-            ActionsUser.user_edit(request['data'])
+            ActionsUser.edit(request['data'])
+        elif action == Hardcoded.action_vehicle_add:
+            ActionsVehicle.add(request['data'])
         else:
             Logger.error(f"Error: Invalid action ({action}).")
             return
@@ -111,7 +112,7 @@ def process_user_requests(user_request_file, user_request_file_full_path):
 
 
 def verify_database():
-    if AppData.allow_drop is True:
+    if AppData.allow_drop.lower() == "true":
         Logger.debug("Dropping the current DB.")
         init_db.drop_tables()
         Logger.debug("ok.")

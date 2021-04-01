@@ -1,0 +1,7 @@
+{
+  "action": "vehicle_add",
+  "data": {
+    "make":"Dodge",
+    "model": "rambo2"
+  }
+}

@@ -20,6 +20,11 @@ class AppData(object):
         db_data = json.load(dbc)
 
 
+    # Set the root folder.
+    root_folder = os.path.realpath(f"{os.path.dirname(os.path.realpath(__file__))}/..")
+    initial_data_file = "/".join([root_folder, "config", config_data['initial_data_file']])
+
+
     new_requests_dir     = config_data['requests']['new_requests_dir']
     handled_requests_dir = config_data['requests']['handled_requests_dir']
     stop_scanning_file   = config_data['stop_scanning_file']
