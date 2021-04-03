@@ -1,7 +1,7 @@
 {
   "database_dir": "db",
   "database_file": "4x4_trips.db",
-  "drop_db_allowed": "true",
+  "drop_db_allowed": "false",
   "table_name_vehicles": "vehicles",
   "table_name_participants": "participants",
   "col_vehicles_id": "Id",

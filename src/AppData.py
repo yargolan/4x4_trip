@@ -35,7 +35,7 @@ class AppData(object):
     with open(f"{root_folder}/config/db_config.json") as dbc:
         db_data = json.load(dbc)
 
-    allow_drop              = db_data['drop_db_allowed']
+    allow_drop              = db_data['drop_db_allowed'].lower == "true"
     database_dir            = db_data['database_dir']
     database_file           = db_data['database_file']
     table_name_vehicles     = db_data['table_name_vehicles']
