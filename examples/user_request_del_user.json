@@ -1,0 +1,8 @@
+{
+  "action": "user_del",
+  "data": {
+    "name":"משה",
+    "email":"moshe@gmail.com",
+    "vehicle_index":62
+  }
+}

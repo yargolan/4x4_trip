@@ -1,0 +1,11 @@
+{
+  "action": "user_edit",
+  "data": {
+    "name":"משה",
+    "new_name":"דוד",
+    "email":"moshe@gmail.com",
+    "new_email":"david.buzaglo@gmail.com",
+    "vehicle_index":62,
+    "new_vehicle_index":61
+  }
+}

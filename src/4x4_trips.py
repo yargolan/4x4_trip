@@ -1,70 +1,50 @@
 
 import os
 import re
+import sys
 import time
-from AppData import AppData
 import Logger
+from AppData import AppData
+import RequestsHandler
+import FileStructureError
 
 
 
 def main():
 
-    keep_scanning = True
+    # Get into the root folder.
+    os.chdir(AppData.requests_dir_full_path)
 
-    new_requests_dir = AppData.new_requests_dir
+    # Go over the requests folder content.
+    with os.scandir(".") as entries:
 
-    os.chdir("..")
-
-    while keep_scanning:
-
-        # sleep for 'x' seconds between iterations.
-        if AppData.debug_mode:
-            Logger.debug(f"Sleeping for {AppData.sleep_interval} seconds ...")
-        time.sleep(AppData.sleep_interval)
-
-
-        # Get the folder's content
-        content = os.listdir(new_requests_dir)
-        if AppData.debug_mode:
-            if content is None:
-                Logger.debug("Nothing to handle.")
-
-        for item in content:
-
-            # Get the full path of the request file.
-            item_full_path = f"{new_requests_dir}/{item}"
-
-
-            # Handle only files.
-            if not os.path.isfile(item_full_path):
-                continue
-
-
-            # Verify if the scan should be stopped.
-            if item == AppData.stop_scanning_file:
-                os.unlink(item_full_path)
-                Logger.info("Shutting down requests scanning process...")
-                Logger.info("OK.")
-                Logger.info("")
-                keep_scanning = False
-                continue
-
-            # Handle the request file.
-            handle_request(item, item_full_path)
+        for entry in entries:
+            entry_path = entry.path
+            entry_name = entry.name
+            handle_current_entry(entry_name, entry_path)
 
 
 
-def handle_request(item, item_full_path):
+def handle_current_entry(entry_name, entry_path):
 
-    Logger.info(f"Handling request file '{item_full_path}'.")
-
-    regex = re.search("^user_request_.*.json$", item)
-
-    if regex is not None:
-        Logger.info(f"Invalid file ({item}), deleting...")
-        os.unlink(item_full_path)
+    # Ignore the already handled folder.
+    if os.path.isdir(entry_path):
+        return
 
 
+    # If the file is with the needed format, handle it.
+    regex = re.search(AppData.request_regex, entry_name)
+    if regex is None:
+        Logger.info(f"Invalid file ({entry_name}), deleting...")
+        os.unlink(entry_path)
+        return
+
+
+    Logger.debug(f"Handling request '{entry_name}'")
+    request_full_path = "/".join([AppData.requests_dir_full_path, entry_name])
+
+    RequestsHandler.handle_request(request_full_path)
+    os.unlink(request_full_path)
 
 
 

@@ -8,6 +8,7 @@ class AppData(object):
     # +------------------------------------
     # |  Hard coded information
     # +------------------------------------
+    request_regex  = "^user_request_.*.json$"
     sleep_interval = 3
 
 
@@ -23,10 +24,11 @@ class AppData(object):
     with open(f"{root_folder}/config/app_config.json") as ac:
         config_data = json.load(ac)
 
-    debug_mode           = config_data['debug_mode'].lower() == "true"
-    new_requests_dir     = config_data['requests']['new_requests_dir']
-    stop_scanning_file   = config_data['stop_scanning_file']
-    handled_requests_dir = config_data['requests']['handled_requests_dir']
+    debug_mode             = config_data['debug_mode'].lower() == "true"
+    requests_dir           = config_data['requests']['new_requests_dir']
+    stop_scanning_file     = config_data['stop_scanning_file']
+    handled_requests_dir   = config_data['requests']['handled_requests_dir']
+    requests_dir_full_path = f"{root_folder}/{requests_dir}"
 
     with open(f"{root_folder}/config/db_config.json") as dbc:
         db_data = json.load(dbc)
