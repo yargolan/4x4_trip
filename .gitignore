@@ -37,4 +37,5 @@ venv.bak/
 
 
 # Current project
+db/**
 requests/**

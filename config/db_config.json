@@ -1,8 +1,15 @@
 {
-  "client": "mongodb://localhost:27017/",
-  "col_vehicles": "vehicles",
-  "database_name": "4x4_trips_database",
-  "drop_db_allowed": "false",
-  "col_participants": "participants"
+  "database_dir": "db",
+  "database_file": "4x4_trips.db",
+  "drop_db_allowed": "true",
+  "table_name_vehicles": "vehicles",
+  "table_name_participants": "participants",
+  "col_vehicles_id": "Id",
+  "col_vehicles_make": "MakeName",
+  "col_vehicles_model": "ModelName",
+  "col_vehicles_make_index": "MakeIndex",
+  "col_participant_name": "ParticipantName",
+  "col_participant_email": "ParticipantEmail",
+  "col_participant_vehicle_index": "ParticipantVehicleIndex"
 }
 

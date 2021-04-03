@@ -7,6 +7,10 @@ def info(message):
 
 
 
+def warn(message):
+    print_message('W', message)
+
+
 def error(message):
     print_message('E', message)
 

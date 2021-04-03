@@ -8,6 +8,7 @@ class AppData(object):
     # +------------------------------------
     # |  Hard coded information
     # +------------------------------------
+    table_name     = "4x4_trips"
     request_regex  = "^user_request_\\d{8}_\\d{6}.json$"
     sleep_interval = 3
 
@@ -34,12 +35,23 @@ class AppData(object):
     with open(f"{root_folder}/config/db_config.json") as dbc:
         db_data = json.load(dbc)
 
-    client                = db_data['client']
-    db_name               = db_data['database_name']
-    allow_drop            = db_data['drop_db_allowed']
-    col_name_vehicles     = db_data['col_vehicles']
-    col_name_participants = db_data['col_participants']
+    allow_drop              = db_data['drop_db_allowed']
+    database_dir            = db_data['database_dir']
+    database_file           = db_data['database_file']
+    table_name_vehicles     = db_data['table_name_vehicles']
+    table_name_participants = db_data['table_name_participants']
+    database_file_full_path = "/". join([root_folder, database_dir, database_file])
 
+    # Vehicles
+    col_vehicles_id         = db_data['col_vehicles_id']
+    col_vehicles_make       = db_data['col_vehicles_make']
+    col_vehicles_model      = db_data['col_vehicles_model']
+    col_vehicles_make_index = db_data['col_vehicles_make_index']
+
+    # Participants
+    col_participant_name          = db_data['col_participant_name']
+    col_participant_email         = db_data['col_participant_email']
+    col_participant_vehicle_index = db_data['col_participant_vehicle_index']
 
     # +------------------------------------
     # |  Set the initial data file

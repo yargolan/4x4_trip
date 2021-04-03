@@ -12,7 +12,7 @@
     },
     {
       "make": "Land-rover",
-      "index": "10",
+      "index": "20",
       "models": [
         {"index": "21", "name": "Discovery"},
         {"index": "22", "name": "Range Rover"}
@@ -37,7 +37,7 @@
     },
     {
       "make": "Suzuki",
-      "index": "10",
+      "index": "50",
       "models": [
         {"index": "51", "name": "Jimny"}
       ]
