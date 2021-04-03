@@ -5,7 +5,6 @@ import sys
 import Logger
 from AppData import AppData
 import RequestsHandler
-import FileStructureError
 
 
 
@@ -22,7 +21,7 @@ def main():
             entry_name = entry.name
             try:
                 handle_current_entry(entry_name, entry_path)
-            except FileStructureError as e:
+            except Exception as e:
                 sys.exit(e)
 
 
@@ -47,9 +46,14 @@ def handle_current_entry(entry_name, entry_path):
 
     try:
         RequestsHandler.handle_request(request_full_path)
+
+    except KeyError as ke:
+
+        # Delete the request file
         os.unlink(request_full_path)
-    except FileStructureError as fse:
-        raise(str(fse))
+
+        raise Exception(f"Invalid request file. Missing key: {str(ke)}")
+
 
 
 if __name__ == '__main__':

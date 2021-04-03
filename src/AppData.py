@@ -8,7 +8,7 @@ class AppData(object):
     # +------------------------------------
     # |  Hard coded information
     # +------------------------------------
-    request_regex  = "^user_request_.*.json$"
+    request_regex  = "^user_request_\\d{8}_\\d{6}.json$"
     sleep_interval = 3
 
 
