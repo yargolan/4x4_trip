@@ -2,7 +2,6 @@
 import os
 import re
 import sys
-import time
 import Logger
 from AppData import AppData
 import RequestsHandler
@@ -21,7 +20,10 @@ def main():
         for entry in entries:
             entry_path = entry.path
             entry_name = entry.name
-            handle_current_entry(entry_name, entry_path)
+            try:
+                handle_current_entry(entry_name, entry_path)
+            except FileStructureError as e:
+                sys.exit(e)
 
 
 
@@ -43,9 +45,11 @@ def handle_current_entry(entry_name, entry_path):
     Logger.debug(f"Handling request '{entry_name}'")
     request_full_path = "/".join([AppData.requests_dir_full_path, entry_name])
 
-    RequestsHandler.handle_request(request_full_path)
-    os.unlink(request_full_path)
-
+    try:
+        RequestsHandler.handle_request(request_full_path)
+        os.unlink(request_full_path)
+    except FileStructureError as fse:
+        raise(str(fse))
 
 
 if __name__ == '__main__':
