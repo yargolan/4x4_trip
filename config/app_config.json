@@ -1,7 +1,7 @@
 {
   "requests": {
     "new_requests_dir": "requests",
-    "handled_requests_dir": "requests/.handled"
+    "handled_requests_dir": ".handled"
   },
   "debug_mode": "True",
   "stop_scanning_file": "stop.it",

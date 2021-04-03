@@ -54,6 +54,11 @@ def handle_current_entry(entry_name, entry_path):
 
         raise Exception(f"Invalid request file. Missing key: {str(ke)}")
 
+    finally:
+
+        # Move the request to backup
+        os.rename(request_full_path, f"{AppData.handled_requests_dir_name}/{entry_name}")
+
 
 
 if __name__ == '__main__':

@@ -24,11 +24,12 @@ class AppData(object):
     with open(f"{root_folder}/config/app_config.json") as ac:
         config_data = json.load(ac)
 
-    debug_mode             = config_data['debug_mode'].lower() == "true"
-    requests_dir           = config_data['requests']['new_requests_dir']
-    stop_scanning_file     = config_data['stop_scanning_file']
-    handled_requests_dir   = config_data['requests']['handled_requests_dir']
-    requests_dir_full_path = f"{root_folder}/{requests_dir}"
+    debug_mode                 = config_data['debug_mode'].lower() == "true"
+    requests_dir               = config_data['requests']['new_requests_dir']
+    stop_scanning_file         = config_data['stop_scanning_file']
+    handled_requests_dir_name  = config_data['requests']['handled_requests_dir']
+    requests_dir_full_path     = f"{root_folder}/{requests_dir}"
+    handled_requests_full_path = f"{requests_dir_full_path}/{handled_requests_dir_name}"
 
     with open(f"{root_folder}/config/db_config.json") as dbc:
         db_data = json.load(dbc)
